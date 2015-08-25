@@ -28,6 +28,8 @@
 @property (nonatomic, strong) NSDictionary *attributesHashtag;
 @property (nonatomic, strong) NSDictionary *attributesLink;
 
+@property (nonatomic, strong) NSMutableArray * augmentedAttributes;
+
 @property (strong) UITextView *textView;
 
 @end
@@ -125,6 +127,7 @@
     _textSelectable = YES;
     _selectionColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     
+    self.augmentedAttributes = [NSMutableArray array];
     _attributesText = @{NSForegroundColorAttributeName: self.textColor, NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     _attributesHandle = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     _attributesHashtag = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
@@ -234,6 +237,12 @@
         STTweetHotWord hotWord = (STTweetHotWord)[dictionary[@"hotWord"] intValue];
         [_textStorage setAttributes:[self attributesForHotWord:hotWord] range:range];
     }
+    
+    for (NSDictionary *dictionary in self.augmentedAttributes) {
+        NSRange range = [((NSValue *) dictionary[@"range"]) rangeValue];
+        NSDictionary * attributes = dictionary[@"attributes"];
+        [_textStorage setAttributes:attributes range:range];
+    }
 
     [_textStorage endEditing];
 }
@@ -324,6 +333,15 @@
     }
     
     [self determineHotWords];
+}
+
+- (void)addAttributes:(NSDictionary *)attributes forRange: (NSRange) range
+{
+    NSDictionary * augmentedAttributes = @{ @"range" : [NSValue valueWithRange:range], @"attributes" : attributes };
+    
+    [self.augmentedAttributes addObject: augmentedAttributes];
+    [self updateText];
+    
 }
 
 - (void)setLeftToRight:(BOOL)leftToRight {

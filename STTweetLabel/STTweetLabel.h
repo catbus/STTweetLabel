@@ -24,9 +24,11 @@ typedef NS_ENUM(NSInteger, STTweetHotWord) {
 
 - (void)setAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord;
+- (void)addAttributes:(NSDictionary *)attributes forRange: (NSRange) range;
 
 - (NSDictionary *)attributes;
 - (NSDictionary *)attributesForHotWord:(STTweetHotWord)hotWord;
+
 
 - (CGSize)suggestedFrameSizeToFitEntireStringConstrainedToWidth:(CGFloat)width;
 
