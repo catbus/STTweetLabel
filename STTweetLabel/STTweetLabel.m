@@ -344,6 +344,10 @@
     
 }
 
+- (void)clearAddedAttributes {
+    self.augmentedAttributes = [NSMutableArray array];
+}
+
 - (void)setLeftToRight:(BOOL)leftToRight {
     _leftToRight = leftToRight;
 
